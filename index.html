@@ -140,13 +140,11 @@ footer{border-top:1px solid var(--line);padding:28px 0;font-size:13px;opacity:0.
     <input id="chat-text" type="text" placeholder="Type a message...">
     <button id="chat-send">Send</button>
   </div>
-  <div class="webhook-row">
-    <label for="webhook-url">n8n webhook URL (optional, for live testing)</label>
-    <input id="webhook-url" type="text" placeholder="https://your-n8n-instance/webhook/website-chat">
-  </div>
 </div>
 
 <script>
+const WEBHOOK_URL = "https://tux-squid-sudoku.ngrok-free.dev/webhook/website-chat";
+
 const products = [
   ["Gentle Foaming Cleanser","Cleanser","₦6,500","A soap free, low pH cleanser that lifts dirt and oil without stripping the skin. Suits daily use, including sensitive skin."],
   ["Charcoal Deep Clean Face Wash","Cleanser","₦7,000","Activated charcoal wash for oily or congested skin, drawing out excess sebum without over drying."],
@@ -179,7 +177,6 @@ const body = document.getElementById('chat-body');
 const input = document.getElementById('chat-text');
 const send = document.getElementById('chat-send');
 const err = document.getElementById('chat-err');
-const webhookInput = document.getElementById('webhook-url');
 const identityBox = document.getElementById('chat-identity');
 const inputRow = document.getElementById('chat-input-row');
 const nameField = document.getElementById('visitor-name');
@@ -235,7 +232,7 @@ async function sendMessage(){
   body.scrollTop = body.scrollHeight;
   input.value = '';
 
-  const webhookUrl = webhookInput.value.trim();
+  const webhookUrl = WEBHOOK_URL;
   if(webhookUrl){
     const typing = document.createElement('div');
     typing.className = 'chat-msg';
