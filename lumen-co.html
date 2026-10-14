@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lumen & Co.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1EEE4; --ink:#26261F; --moss:#4B5C42; --moss-dark:#33402C;
+  --blush:#D9B8A9; --line:#D8D3C4; --card:#FAF8F1;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1C1B16; --ink:#EDEAE0; --moss:#8FA680; --moss-dark:#A9BF9B;
+    --blush:#C99C89; --line:#3A382E; --card:#242219;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1C1B16; --ink:#EDEAE0; --moss:#8FA680; --moss-dark:#A9BF9B;
+  --blush:#C99C89; --line:#3A382E; --card:#242219;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  line-height:1.6;
+}
+h1,h2,.brand{font-family:'Fraunces',serif}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px}
+header{display:flex;justify-content:space-between;align-items:center;padding:28px 0;border-bottom:1px solid var(--line)}
+.brand{font-size:22px;font-weight:500;letter-spacing:0.2px}
+nav a{color:var(--ink);text-decoration:none;font-size:14px;margin-left:24px;opacity:0.75}
+.hero{padding:64px 0 48px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:40px;align-items:center}
+@media (max-width:720px){.hero{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(32px,5vw,48px);font-weight:500;line-height:1.15;max-width:11ch}
+.hero p{margin-top:16px;max-width:42ch;opacity:0.85;font-size:16px}
+.hero-cta{margin-top:28px;display:inline-block;background:var(--moss);color:var(--paper);
+  padding:12px 22px;border-radius:4px;font-size:14px;font-weight:500;text-decoration:none}
+.hero-art{position:relative;height:280px}
+.hero-art .blob{position:absolute;border-radius:50%;background:var(--blush);opacity:0.55}
+.hero-art .b1{width:220px;height:220px;top:10px;right:40px}
+.hero-art .b2{width:140px;height:140px;bottom:0;right:0;background:var(--moss);opacity:0.35}
+.hero-art .jar{position:absolute;right:110px;top:60px;width:100px;height:130px;
+  background:var(--card);border:1px solid var(--line);border-radius:14px 14px 22px 22px}
+.hero-art .jar::before{content:"";position:absolute;top:-14px;left:20px;width:60px;height:20px;
+  background:var(--moss-dark);border-radius:4px}
+
+.section-label{font-size:13px;text-transform:none;opacity:0.65;margin-bottom:6px}
+.section-title{font-size:26px;font-weight:500;margin-bottom:28px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding-bottom:56px}
+@media (max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:460px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px}
+.card .cat{font-size:12px;color:var(--moss-dark);margin-bottom:6px}
+.card h3{font-size:15.5px;font-weight:500;line-height:1.35;min-height:42px}
+.card .price{margin-top:12px;font-size:14px;font-weight:600;opacity:0.9}
+
+footer{border-top:1px solid var(--line);padding:28px 0;font-size:13px;opacity:0.65}
+
+/* chat widget */
+#chat-toggle{position:fixed;bottom:20px;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  width:56px;height:56px;border-radius:50%;background:var(--moss);color:var(--paper);
+  border:none;font-size:22px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,0.25);z-index:40}
+#chat-panel{position:fixed;bottom:86px;bottom:calc(86px + env(safe-area-inset-bottom,0px));right:20px;
+  width:300px;min-width:260px;min-height:320px;max-width:min(520px,calc(100vw - 40px));max-height:80vh;
+  background:var(--card);border:1px solid var(--line);
+  border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.25);display:none;flex-direction:column;
+  overflow:auto;resize:both;z-index:40}
+#chat-panel.open{display:flex}
+#chat-panel::after{content:"";position:absolute;bottom:3px;right:3px;width:10px;height:10px;
+  pointer-events:none;border-right:2px solid var(--line);border-bottom:2px solid var(--line);
+  opacity:0.6}
+.chat-head{background:var(--moss);color:var(--paper);padding:14px 16px;font-size:14px;font-weight:500}
+.chat-head span{display:block;font-weight:400;font-size:12px;opacity:0.85;margin-top:2px}
+.chat-body{padding:12px;height:220px;overflow-y:auto;font-size:13.5px}
+.chat-msg{background:var(--paper);border-radius:8px;padding:8px 10px;margin-bottom:8px;max-width:85%;white-space:pre-line}
+.chat-msg.me{margin-left:auto;background:var(--blush)}
+.chat-input{display:flex;border-top:1px solid var(--line)}
+.chat-input input{flex:1;border:none;background:transparent;padding:12px;font-size:13.5px;color:var(--ink)}
+.chat-input input:focus{outline:none}
+.chat-input button{border:none;background:none;color:var(--moss-dark);font-weight:600;padding:0 14px;cursor:pointer}
+.webhook-row{padding:8px 12px;border-top:1px solid var(--line)}
+.webhook-row input{width:100%;font-size:11px;padding:6px 8px;border:1px solid var(--line);
+  border-radius:6px;background:var(--paper);color:var(--ink)}
+.webhook-row label{font-size:10.5px;opacity:0.6;display:block;margin-bottom:4px}
+.err{color:#B5453A;font-size:11px;padding:0 12px 8px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="brand">Lumen & Co.</div>
+    <nav><a href="#catalog">Catalog</a><a href="#about">About</a></nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>Skincare that keeps things simple</h1>
+      <p>Fifteen essentials, no filler ingredients, no routine you can't keep up with. Formulated for everyday skin, everyday budgets.</p>
+      <a class="hero-cta" href="#catalog">Browse the catalog</a>
+    </div>
+    <div class="hero-art">
+      <div class="blob b1"></div>
+      <div class="blob b2"></div>
+      <div class="jar"></div>
+    </div>
+  </section>
+
+  <section id="catalog">
+    <div class="section-label">The full range</div>
+    <div class="section-title">15 products, one routine at a time</div>
+    <div class="grid" id="product-grid"></div>
+  </section>
+
+  <footer id="about">Lumen & Co. — a small skincare label. This page is a Phase 1 demo asset for the Multi channel AI Agent project.</footer>
+</div>
+
+<button id="chat-toggle" aria-label="Open chat">💬</button>
+<div id="chat-panel">
+  <div class="chat-head">Chat with Lumen & Co.<span>Usually replies in a few minutes</span></div>
+
+  <div id="chat-identity" style="padding:14px;display:flex;flex-direction:column;gap:8px">
+    <div style="font-size:12.5px;opacity:0.75">Before we start, who am I speaking with?</div>
+    <input id="visitor-name" type="text" placeholder="Your name" style="padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);font-size:13px">
+    <input id="visitor-email" type="email" placeholder="Your email (so we can follow up)" style="padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);font-size:13px">
+    <input id="visitor-phone" type="tel" placeholder="Phone (optional, if you also use WhatsApp)" style="padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);font-size:13px">
+    <button id="visitor-start" style="background:var(--moss);color:var(--paper);border:none;border-radius:6px;padding:9px;font-size:13px;font-weight:500;cursor:pointer">Start chat</button>
+  </div>
+
+  <div class="chat-body" id="chat-body" style="display:none"></div>
+  <div class="err" id="chat-err" style="display:none"></div>
+  <div class="chat-input" id="chat-input-row" style="display:none">
+    <input id="chat-text" type="text" placeholder="Type a message...">
+    <button id="chat-send">Send</button>
+  </div>
+  <div class="webhook-row">
+    <label for="webhook-url">n8n webhook URL (optional, for live testing)</label>
+    <input id="webhook-url" type="text" placeholder="https://your-n8n-instance/webhook/website-chat">
+  </div>
+</div>
+
+<script>
+const products = [
+  ["Gentle Foaming Cleanser","Cleanser","₦6,500","A soap free, low pH cleanser that lifts dirt and oil without stripping the skin. Suits daily use, including sensitive skin."],
+  ["Charcoal Deep Clean Face Wash","Cleanser","₦7,000","Activated charcoal wash for oily or congested skin, drawing out excess sebum without over drying."],
+  ["Hydrating Rose Toner","Toner","₦5,500","An alcohol free toner with rose water and glycerin that preps skin and locks in moisture before serum."],
+  ["Vitamin C Brightening Serum","Serum","₦12,000","15% stabilized Vitamin C to fade dark spots and even out skin tone. Best applied in the morning under sunscreen."],
+  ["Niacinamide 10% Serum","Serum","₦10,500","Reduces the look of pores and controls shine while supporting the skin barrier. Good for oily and combination skin."],
+  ["Hyaluronic Acid Moisture Serum","Serum","₦11,000","A lightweight, multi weight hyaluronic acid serum that pulls moisture into the skin for an instant plumping effect."],
+  ["Daily Lightweight Moisturizer","Moisturizer","₦8,500","An oil free, fast absorbing moisturizer for everyday hydration under makeup or alone."],
+  ["Shea Butter Night Cream","Moisturizer","₦9,500","A richer, restorative cream with shea butter and ceramides to repair the skin barrier overnight."],
+  ["SPF 50 Sunscreen Gel","Sun care","₦7,500","Broad spectrum SPF 50 in a lightweight gel base with no white cast, for daily sun protection."],
+  ["Exfoliating Clay Mask","Mask","₦6,000","A kaolin clay mask that draws out impurities and softens rough texture, use 1 to 2 times a week."],
+  ["Under Eye Cooling Gel Patches","Treatment","₦4,500","Hydrogel patches with caffeine to reduce puffiness and brighten tired under eyes in 15 minutes."],
+  ["Lip Repair Balm Set","Lip care","₦3,500","A set of 3 nourishing lip balms with shea butter and vitamin E to heal dry, cracked lips."],
+  ["Body Butter Lotion (Shea + Cocoa)","Body care","₦8,000","A thick, whipped body lotion with shea and cocoa butter for deep, long lasting hydration."],
+  ["Glow Starter Kit","Gift set","₦22,000","A 3 step introduction to the brand: cleanser, brightening serum, and daily moisturizer in one set."],
+  ["Complete Skincare Routine Bundle","Gift set","₦45,000","The full 6 step Lumen & Co. routine, cleanser to sunscreen, at a bundled price."]
+];
+const grid = document.getElementById('product-grid');
+grid.innerHTML = products.map(p => `
+  <div class="card">
+    <div class="cat">${p[1]}</div>
+    <h3>${p[0]}</h3>
+    <p style="font-size:12.5px;opacity:0.75;margin-top:6px;line-height:1.5">${p[3]}</p>
+    <div class="price">${p[2]}</div>
+  </div>`).join('');
+
+const toggle = document.getElementById('chat-toggle');
+const panel = document.getElementById('chat-panel');
+const body = document.getElementById('chat-body');
+const input = document.getElementById('chat-text');
+const send = document.getElementById('chat-send');
+const err = document.getElementById('chat-err');
+const webhookInput = document.getElementById('webhook-url');
+const identityBox = document.getElementById('chat-identity');
+const inputRow = document.getElementById('chat-input-row');
+const nameField = document.getElementById('visitor-name');
+const emailField = document.getElementById('visitor-email');
+const phoneField = document.getElementById('visitor-phone');
+const startBtn = document.getElementById('visitor-start');
+
+let visitorName = '';
+let visitorEmail = '';
+let visitorPhone = '';
+
+// Normalizes any Nigerian phone input to the bare 234XXXXXXXXXX
+// format already used in the CRM's Phone field (matches WhatsApp's raw "from").
+function normalizePhone(raw){
+  const digits = raw.replace(/\D/g, '');
+  if(!digits) return null;
+  if(digits.startsWith('234')) return digits;
+  if(digits.startsWith('0')) return '234' + digits.slice(1);
+  return '234' + digits;
+}
+
+toggle.addEventListener('click', () => panel.classList.toggle('open'));
+
+startBtn.addEventListener('click', () => {
+  const n = nameField.value.trim();
+  const e = emailField.value.trim();
+  if(!n){
+    nameField.style.borderColor = '#B5453A';
+    return;
+  }
+  const p = phoneField.value.trim();
+  visitorName = n;
+  visitorEmail = e || null;
+  visitorPhone = p ? normalizePhone(p) : null;
+  identityBox.style.display = 'none';
+  body.style.display = 'block';
+  inputRow.style.display = 'flex';
+  body.innerHTML = `<div class="chat-msg">Hi ${visitorName}! Ask me about any product, an order, or delivery.</div>`;
+});
+
+async function sendMessage(){
+  const text = input.value.trim();
+  err.style.display = 'none';
+  if(!text){
+    err.textContent = 'Type a message first';
+    err.style.display = 'block';
+    return;
+  }
+  const msg = document.createElement('div');
+  msg.className = 'chat-msg me';
+  msg.textContent = text;
+  body.appendChild(msg);
+  body.scrollTop = body.scrollHeight;
+  input.value = '';
+
+  const webhookUrl = webhookInput.value.trim();
+  if(webhookUrl){
+    const typing = document.createElement('div');
+    typing.className = 'chat-msg';
+    typing.textContent = 'Typing...';
+    typing.id = 'typing-indicator';
+    body.appendChild(typing);
+    body.scrollTop = body.scrollHeight;
+
+    try{
+      const res = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          channel: 'website-chat',
+          name: visitorName || 'Website visitor',
+          email: visitorEmail,
+          phone: visitorPhone,
+          message: text,
+          timestamp: new Date().toISOString()
+        })
+      });
+      const data = await res.json();
+      document.getElementById('typing-indicator')?.remove();
+      const reply = document.createElement('div');
+      reply.className = 'chat-msg';
+      reply.textContent = data.reply || "Sorry, I didn't catch a reply, please try again.";
+      body.appendChild(reply);
+      body.scrollTop = body.scrollHeight;
+    }catch(e){
+      document.getElementById('typing-indicator')?.remove();
+      err.textContent = 'Could not reach the webhook (check the URL and that n8n is running)';
+      err.style.display = 'block';
+    }
+  }
+}
+send.addEventListener('click', sendMessage);
+input.addEventListener('keydown', e => { if(e.key === 'Enter') sendMessage(); });
+</script>
+</body>
+</html>
