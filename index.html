@@ -78,13 +78,14 @@ footer{border-top:1px solid var(--line);padding:28px 0;font-size:13px;opacity:0.
   opacity:0.6}
 .chat-head{background:var(--moss);color:var(--paper);padding:14px 16px;font-size:14px;font-weight:500}
 .chat-head span{display:block;font-weight:400;font-size:12px;opacity:0.85;margin-top:2px}
-.chat-body{padding:12px;height:220px;overflow-y:auto;font-size:13.5px}
+.chat-body{padding:12px;flex:1;min-height:120px;overflow-y:auto;font-size:13.5px}
 .chat-msg{background:var(--paper);border-radius:8px;padding:8px 10px;margin-bottom:8px;max-width:85%;white-space:pre-line}
 .chat-msg.me{margin-left:auto;background:var(--blush)}
-.chat-input{display:flex;border-top:1px solid var(--line)}
-.chat-input input{flex:1;border:none;background:transparent;padding:12px;font-size:13.5px;color:var(--ink)}
-.chat-input input:focus{outline:none}
-.chat-input button{border:none;background:none;color:var(--moss-dark);font-weight:600;padding:0 14px;cursor:pointer}
+.chat-input{display:flex;align-items:flex-end;border-top:1px solid var(--line);flex-shrink:0}
+.chat-input textarea{flex:1;border:none;background:transparent;padding:12px;font-size:13.5px;color:var(--ink);
+  font-family:inherit;line-height:1.4;resize:none;overflow-y:auto;max-height:120px}
+.chat-input textarea:focus{outline:none}
+.chat-input button{border:none;background:none;color:var(--moss-dark);font-weight:600;padding:12px 14px;cursor:pointer;flex-shrink:0}
 .webhook-row{padding:8px 12px;border-top:1px solid var(--line)}
 .webhook-row input{width:100%;font-size:11px;padding:6px 8px;border:1px solid var(--line);
   border-radius:6px;background:var(--paper);color:var(--ink)}
@@ -137,7 +138,7 @@ footer{border-top:1px solid var(--line);padding:28px 0;font-size:13px;opacity:0.
   <div class="chat-body" id="chat-body" style="display:none"></div>
   <div class="err" id="chat-err" style="display:none"></div>
   <div class="chat-input" id="chat-input-row" style="display:none">
-    <input id="chat-text" type="text" placeholder="Type a message...">
+    <textarea id="chat-text" placeholder="Type a message..." rows="1"></textarea>
     <button id="chat-send">Send</button>
   </div>
 </div>
@@ -231,6 +232,7 @@ async function sendMessage(){
   body.appendChild(msg);
   body.scrollTop = body.scrollHeight;
   input.value = '';
+  resizeInput();
 
   const webhookUrl = WEBHOOK_URL;
   if(webhookUrl){
@@ -268,8 +270,18 @@ async function sendMessage(){
     }
   }
 }
+function resizeInput(){
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+}
 send.addEventListener('click', sendMessage);
-input.addEventListener('keydown', e => { if(e.key === 'Enter') sendMessage(); });
+input.addEventListener('input', resizeInput);
+input.addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !e.shiftKey){
+    e.preventDefault();
+    sendMessage();
+  }
+});
 </script>
 </body>
 </html>
